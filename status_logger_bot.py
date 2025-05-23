@@ -1,17 +1,27 @@
+import os
 from dotenv import load_dotenv
-load_dotenv()
 import discord
 from discord.ext import commands
 
+# Load environment variables from .env file
+load_dotenv()
+
+# Get the bot token
+TOKEN = os.getenv('YOUR_BOT_TOKEN')
+if TOKEN is None:
+    raise ValueError("❌ Bot token not found. Set 'YOUR_BOT_TOKEN' in your .env file or hosting environment.")
+
+# Set up intents
 intents = discord.Intents.default()
 intents.message_content = True
 intents.members = True
 intents.presences = True
 
+# Create the bot
 bot = commands.Bot(command_prefix='!', intents=intents)
 
-# Replace with your actual log channel ID
-LOG_CHANNEL_ID = 1375401157471502437  # <- Put your channel ID here
+# Channel to log messages and presence updates
+LOG_CHANNEL_ID = 1375401157471502437  # <- Your Discord log channel ID
 
 @bot.event
 async def on_ready():
@@ -39,7 +49,5 @@ async def on_message(message):
 
     await bot.process_commands(message)
 
-# Replace 'YOUR_BOT_TOKEN' with your bot token
-import os
-bot.run(os.getenv('YOUR_BOT_TOKEN'))
-
+# Run the bot
+bot.run(TOKEN)
